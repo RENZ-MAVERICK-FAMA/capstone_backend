@@ -14,7 +14,6 @@
     cors==1.0.1
     cryptography==42.0.4
     distlib==0.3.8
-    Django==5.0.2
     dnspython==2.6.1
     email_validator==2.1.1
     et-xmlfile==1.1.0
