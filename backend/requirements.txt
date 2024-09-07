@@ -6,6 +6,7 @@
     cachetools==5.3.3
     certifi==2024.2.2
     cffi==1.16.0
+apt-get install libmariadb-dev
     channels==4.0.0
     charset-normalizer==3.3.2
     click==8.1.7
