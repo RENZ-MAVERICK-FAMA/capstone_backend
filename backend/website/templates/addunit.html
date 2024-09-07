@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Unit</title>
+</head>
+<body>
+    <h1>Add Unit</h1>
+    <form action="/add-unit" method="post">
+        <label for="unittype">Unit Type:</label>
+        <select name="unittype" id="unit-type">
+            <option value="motorela">Motorela</option>
+            <option value="multicab">Multicab</option>
+            <option value="bus">Bus</option>
+        </select><br><br>
+        <label for="color">Color:</label><br>
+        <input type="text" name="color" id="color" required><br><br>
+        
+
+
+        <label for="unitinfo">Unit  Information:</label><br>
+        <input type="text" name="unitinfo" id="unitinfo" required unique><br><br>
+        <button type="submit">Add Unit</button>
+    </form>
+</body>
+{% endblock %}

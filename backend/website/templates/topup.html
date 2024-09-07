@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Top Up{% endblock %}
+{% block content %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+
+<h2 align="center">Top Up Balance</h2>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form id="topup-form" method="POST">
+        <div class="form-group">
+          <label for="unit">Select Unit:</label>
+          <select class="form-control" id="unit" name="unit">
+            {% for unit in user.units %}
+            <option value="{{ unit.id }}">{{ unit.unit_info }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label for="branch">Branch:</label>
+        <select name="branch" id="branch">
+            <option value="market">Market</option>
+           
+        </select><br>
+        <label for="teller">Teller:</label>
+        <select name="teller" id="teller">
+            <option value="market">male</option>
+            <option value="market">female</option>
+        </select><br>
+
+
+        <div class="form-group">
+          <label for="amt">Amount to Top Up:</label>
+          <input type="number" class="form-control" id="amt" name="amt" placeholder="Enter amount">
+        </div>
+        <button type="submit" class="btn btn-primary">Top Up</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  // Initialize the WebSocket
+  var socketio = io();
+ console.log('SocketIO connected:', socketio.connected);
+  socketio.emit('add_balance', { id: unit.id, amt: amount });
+  const addbalance = (id, amt) => {
+    // Fetch the current balance from the server
+    fetch(`/get_balance/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            // Parse the current balance
+            let currentBalance = parseFloat(data.balance);
+
+            // Add the amount to the current balance
+            let newBalance = currentBalance + parseFloat(amt);
+
+            // Display the new balance in a table cell
+            let balanceElement = document.getElementById(`balance-${id}`);
+            if (balanceElement) {
+                balanceElement.innerText = newBalance.toFixed(2); // Display the balance with two decimal places
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching balance:', error);
+        });
+};
+
+
+
+
+
+
+  const addbalanc = (id, amt) => {
+    const balanceElement = document.getElementById(`balance-${unitId}`);
+    if (balanceElement) {
+        // Get the current balance from the element's inner text
+        let currentBalance = parseFloat(balanceElement.innerText);
+        // Add the top-up amount to the current balance
+        let newBalance = currentBalance + parseFloat(amt);
+        // Update the element's inner text with the new balance
+        balanceElement.innerText = newBalance; // Assuming the balance is a decimal number
+    }
+};
+
+
+
+  
+</script>
+
+{% endblock %}

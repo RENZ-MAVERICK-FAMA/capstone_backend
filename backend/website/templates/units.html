@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Units{% endblock %}
+{% block content %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+<h1>Units</h1>
+<table class="table">
+  <thead>
+      <tr>
+          <th>Unit Info</th>
+          <th>Unit Type</th>
+          <th>QR Code</th>
+          <th>Color</th>
+          <th>Balance</th>
+          <th>Status</th>
+          <th>Actions</th>
+      </tr>
+  </thead>
+  <tbody>
+      {% for unit in units %}
+      <tr>
+          <td>{{ unit.unit_info }}</td>
+          <td>{{ unit.unit_type }}</td>
+          <td><img src="{{ url_for('static', filename='qrcodes/' ~ unit.qrcode) }}" alt="QR Code" style="width: 50px; height: 50px;"></td>
+          <td>{{ unit.color }}</td>
+          {% for balance in unit.balances %}
+    <td class="balance-cell" data-unit-id="{{ unit.id }}">{{ balance.balance }}</td>
+{% endfor %}    
+          <td>sada</td>
+          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#transactionsModal{{ unit.id }}">
+              View Transactions
+          </button>
+         <!-- Modal -->
+<div class="modal fade" id="transactionsModal{{ unit.id }}" tabindex="-1" role="dialog" aria-labelledby="transactionsModalLabel{{ unit.id }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="transactionsModalLabel{{ unit.id }}">Transactions</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <th>Teller</th>
+                          <th>Branch</th>
+                          <th>Date of Payment</th>
+                          <th>Type</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for transaction in transactions[unit.id] %}
+                      <tr>
+                          <td>{{ transaction.amount }}</td>
+                          <td>{{ transaction.date }}</td>
+                          <td>{{ transaction.teller }}</td>
+                          <td>{{ transaction.branch }}</td>
+                          <td>{{ transaction.date_of_payment }}</td>
+                          <td><strong>{{ transaction.type.name.split('.')[-1] }}</strong></td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+<script>
+    // Connect to the Socket.IO server
+    var socketio = io();
+    console.log('SocketIO connected:', socketio.connected);
+
+    // Listen for the 'add_balance' event from the server
+    socketio.on('add_balance', (data) => {
+        addbalance(data.id, data.amt);
+    });
+
+    // Function to update the balance in the table
+    const addbalance = (id, amt) => {
+        // Fetch the current balance from the server
+        fetch(`/get_balance/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                // Parse the current balance
+                let currentBalance = parseFloat(data.balance);
+
+                // Add the amount to the current balance
+                let newBalance = currentBalance + parseFloat(amt);
+
+                // Find the <td> element with the class "balance-cell" and the corresponding unit ID
+                let balanceCell = document.querySelector(`.balance-cell[data-unit-id="${id}"]`);
+                if (balanceCell) {
+                    balanceCell.innerText = newBalance.toFixed(2); // Display the balance with two decimal places
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching balance:', error);
+            });
+    };
+</script>
+{% endblock %}
