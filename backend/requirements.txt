@@ -10,8 +10,6 @@
     charset-normalizer==3.3.2
     click==8.1.7
     cloudinary==1.39.1
-    colorama==0.4.6
-    cors==1.0.1
     cryptography==42.0.4
     distlib==0.3.8
     dnspython==2.6.1
