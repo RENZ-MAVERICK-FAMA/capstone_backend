@@ -12,7 +12,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'QRMCPASS'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/qrmcpass'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/qrmcpass'
 
     db.init_app(app)
 
