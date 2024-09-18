@@ -30,7 +30,7 @@ filehandler = RotatingFileHandler("logs.log" ,backupCount=500 ,maxBytes=20883)
 filehandler.setFormatter(logFormatter)  # Use logFormatter, not newFormatter
 logger.addHandler(filehandler)
 
-CORS(app, resources={r"/*": {"origins": "http://main--qrmc-pass.netlify.app"}})
+CORS(app, resources={r"/*": {"origins": "https://main--qrmc-pass.netlify.app"}})
 jwt = JWTManager(app)
 mail = Mail(app)
 
