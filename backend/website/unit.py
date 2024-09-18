@@ -281,9 +281,9 @@ def addunit():
     password2 = request.form.get('password2')
     user_id = get_jwt_identity()
 
-    if not re.match("^[a-zA-Z0-9]+$", color):
+    if not re.match("^[a-zA-Z]+$", color):
         return jsonify({'error': 'Color can only contain alphanumeric characters'}), 400
-    if not re.match("^[a-zA-Z0-9]+$", unit_info):
+    if not re.match("^[a-zA-Z0-9]([ -]?[a-zA-Z0-9])*$", unit_info):
         return jsonify({'error': 'Unit Information can only contain alphanumeric characters'}), 400
     # Check if passwords match and meet length requirement
     if password1 != password2:

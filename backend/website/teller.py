@@ -521,8 +521,23 @@ def get_multicab_delinquencies():
     # Return the delinquency data as JSON
     return jsonify({'delinquencies': delinquency_list}), 200
 
+@teller.route('/units/<int:unit_id>/delinquencies', methods=['GET'])
+def get_delinquencies(unit_id):
+    # Query all delinquencies for the specified unit
+    delinquencies = Delinquency.query.filter(Delinquency.unit_id == unit_id).all()
 
+    # Prepare the list of delinquencies to return
+    delinquency_list = []
+    for delinquency in delinquencies:
+        delinquency_list.append({
+            'id': delinquency.id,
+            'unit_id': delinquency.unit.unit_info,  # Assuming unit_info is what you want to display
+            'date_of_payment': delinquency.date_of_payment.strftime('%Y-%m-%d'),
+            'status': delinquency.status.value  # Assuming status is an enum
+        })
 
+    # Return the delinquencies as a JSON response
+    return jsonify({'delinquencies': delinquency_list}), 200
 
 @teller.route('/inserted_coins', methods=['GET'])
 def get_inserted_coins():

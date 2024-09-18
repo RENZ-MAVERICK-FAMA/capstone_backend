@@ -432,6 +432,21 @@ def get_all_users():
         })
     return jsonify({'users': users_list})
 
+@auth.route('/operator', methods=['GET'])
+def get_all_operator():
+    users = User.query.all()
+    users_list = []
+    for users in users:
+        users_list.append({
+            'id':users.id,
+            'email': users.email,
+            'first_name': users.first_name,
+            'last_name': users.last_name,
+            'address1': users.address,
+            'password': users.password
+          
+        })
+    return jsonify({'operator': users_list})
 @auth.route('/units', methods=['GET'])
 def get_all_units():
     units = Unit.query.all()
