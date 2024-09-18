@@ -31,7 +31,9 @@ logger.addHandler(consoleHandler)
 fileHandler = RotatingFileHandler("logs.log", maxBytes=1024 * 1024 * 5, backupCount=5)  # 5 MB per file, keep 5 backups
 fileHandler.setFormatter(logFormatter)
 logger.addHandler(fileHandler)
-
+@app.route('/hello', methods=['GET'])
+def hello_world():
+    return "Hello, World!"
 CORS(app, resources={r"/*": {"origins": "https://main--qrmc-pass.netlify.app", "allow_headers": ["Content-Type", "Authorization"]}})
 
 jwt = JWTManager(app)
